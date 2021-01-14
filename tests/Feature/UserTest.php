@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Mail\UserWelcomeEmail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -13,9 +15,10 @@ class UserTest extends TestCase
     /** @test */
     public function it_returns_the_user_on_successfully_creating_a_new_user()
     {
+        Mail::fake();
         $data = [
             'name' => $this->faker->name(),
-            'email' => $this->faker->email,
+            'email' => $this->faker->unique()->email,
             'password' => $this->faker->password(6)
         ];
         $this->post(route('users.store'), $data)
@@ -53,7 +56,7 @@ class UserTest extends TestCase
 
         $data = [
             'name' => $this->faker->name(),
-            'email' => $this->faker->email
+            'email' => $this->faker->unique()->email
         ];
 
         $this->put(route('users.update', ['id' => $user['id']]), $data)
@@ -82,5 +85,22 @@ class UserTest extends TestCase
                     'email' => ['The email must be a valid email address.']
                 ]
             ]);
+    }
+
+    /** @test */
+    public function it_should_be_sent_a_welcome_email_when_user_is_created()
+    {
+        Mail::fake();
+        Mail::assertNothingSent();
+        $data = [
+            'name' => $this->faker->name(),
+            'email' => $this->faker->email,
+            'password' => $this->faker->password(6)
+        ];
+        $this->post(route('users.store'), $data)
+            ->assertStatus(201);
+        Mail::assertQueued(UserWelcomeEmail::class, function ($mail) use ($data) {
+            return $mail->hasTo($data['email']);
+        });
     }
 }

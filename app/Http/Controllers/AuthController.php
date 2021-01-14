@@ -10,8 +10,10 @@ class AuthController extends Controller
     {
         if (!auth()->attempt($request->all())) {
             return response()->json([
-                'message' => 'Invalid Credentials'
-            ]);
+                'errors' => [
+                    'password' => ['Oops! wrong password']
+                ]
+            ], 422);
         }
 
         $accessToken = auth()->user()->createToken('authToken')->accessToken;

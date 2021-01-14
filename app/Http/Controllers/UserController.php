@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Mail\UserWelcomeEmail;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -28,9 +30,18 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        return response()->json([
-            'data' => User::create($request->all())
-        ], 201);
+        try {
+            $user = User::create($request->all());
+            Mail::to($user->email)
+                ->queue(new UserWelcomeEmail($user));
+            return response()->json([
+                'data' => $user
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
