@@ -21,3 +21,10 @@ Route::prefix('users')->group(function () {
     Route::post('/', 'App\Http\Controllers\UserController@store')->name('users.store');
     Route::put('/{id}', 'App\Http\Controllers\UserController@update')->middleware('auth:api')->name('users.update');
 });
+
+Route::prefix('phases')->middleware('auth:api')->group(function () {
+    Route::get('/', 'App\Http\Controllers\PhaseController@index')->name('phases.index');
+    Route::post('/', 'App\Http\Controllers\PhaseController@store')->name('phases.store');
+    Route::put('/{id}', 'App\Http\Controllers\PhaseController@update')->name('phases.update');
+    Route::delete('/{id}', 'App\Http\Controllers\PhaseController@destroy')->name('phases.delete');
+});
