@@ -13,4 +13,9 @@ class Phase extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function applications ()
+    {
+        return $this->hasMany('App\Models\Application', 'phase_id');
+    }
 }

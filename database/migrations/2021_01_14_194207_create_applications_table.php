@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePhasesTable extends Migration
+class CreateApplicationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,17 @@ class CreatePhasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('phases', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('applications', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
-            $table->softDeletes();
+            $table->string('company')->nullable();
+
+            $table->unsignedInteger('phase_id');
+            $table->foreign('phase_id')
+                ->references('id')
+                ->on('phases')
+                ->onDelete('restrict');
+
             $table->timestamps();
         });
     }
@@ -28,6 +35,6 @@ class CreatePhasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('phases');
+        Schema::dropIfExists('applications');
     }
 }

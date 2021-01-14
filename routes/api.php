@@ -28,3 +28,10 @@ Route::prefix('phases')->middleware('auth:api')->group(function () {
     Route::put('/{id}', 'App\Http\Controllers\PhaseController@update')->name('phases.update');
     Route::delete('/{id}', 'App\Http\Controllers\PhaseController@destroy')->name('phases.delete');
 });
+
+Route::prefix('applications')->middleware('auth:api')->group(function () {
+    Route::get('/', 'App\Http\Controllers\ApplicationController@index')->name('applications.index');
+    Route::post('/', 'App\Http\Controllers\ApplicationController@store')->name('applications.store');
+    Route::put('/{id}', 'App\Http\Controllers\ApplicationController@update')->name('applications.update');
+    Route::delete('/{id}', 'App\Http\Controllers\ApplicationController@destroy')->name('applications.delete');
+});
