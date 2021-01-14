@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
@@ -26,7 +27,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_appropieate_field_validation_errors_on_creating_a_new_user()
+    public function it_returns_appropriate_field_validation_errors_on_creating_a_new_user()
     {
         $data = [
             'name' => '',
@@ -44,4 +45,42 @@ class UserTest extends TestCase
             ]);
     }
 
+    /** @test */
+    public function it_returns_updated_user_on_updating()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'api');
+
+        $data = [
+            'name' => $this->faker->name(),
+            'email' => $this->faker->email
+        ];
+
+        $this->put(route('users.update', ['id' => $user['id']]), $data)
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'name' => $data['name'],
+                'email' => $data['email']
+            ]);
+    }
+
+    /** @test */
+    public function it_returns_appropriate_field_validation_errors_on_updating()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user, 'api');
+
+        $data = [
+            'email' => 'invalid email',
+        ];
+
+        $this->put(route('users.update', ['id' => $user['id']]), $data)
+            ->assertStatus(422)
+            ->assertJson([
+                'errors' => [
+                    'name' => ['The name field is required.'],
+                    'email' => ['The email must be a valid email address.']
+                ]
+            ]);
+    }
 }

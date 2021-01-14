@@ -51,9 +51,20 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $user->fill($request->all());
+            $user->save();
+            return response()->json([
+                'data' => $user
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

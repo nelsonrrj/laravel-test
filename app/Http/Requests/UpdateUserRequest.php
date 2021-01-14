@@ -26,7 +26,7 @@ class UpdateUserRequest extends ApiRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6'
+            'password' => 'sometimes|min:6'
         ];
     }
 }

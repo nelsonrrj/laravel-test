@@ -19,4 +19,5 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('users')->group(function () {
     Route::post('/', 'App\Http\Controllers\UserController@store')->name('users.store');
+    Route::put('/{id}', 'App\Http\Controllers\UserController@update')->middleware('auth:api')->name('users.update');
 });
