@@ -25,7 +25,7 @@ Route::prefix('users')->group(function () {
     Route::put('/{id}', 'App\Http\Controllers\UserController@update')->middleware('auth:api')->name('users.update');
 });
 
-Route::prefix('phases')->group(function () {
+Route::prefix('phases')->middleware('auth:api')->group(function () {
     Route::get('/', 'App\Http\Controllers\PhaseController@index')->name('phases.index');
     Route::post('/', 'App\Http\Controllers\PhaseController@store')->name('phases.store');
     Route::post('/range', 'App\Http\Controllers\PhaseController@range')->name('phases.range');
