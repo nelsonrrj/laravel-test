@@ -1,6 +1,9 @@
 <?php
 
+use App\Exports\ApplicationExport;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +37,9 @@ Route::prefix('applications')->middleware('auth:api')->group(function () {
     Route::post('/', 'App\Http\Controllers\ApplicationController@store')->name('applications.store');
     Route::put('/{id}', 'App\Http\Controllers\ApplicationController@update')->name('applications.update');
     Route::delete('/{id}', 'App\Http\Controllers\ApplicationController@destroy')->name('applications.delete');
+});
+
+Route::get('/test', function() {
+    $date = Date::now()->format('Y-m-d');
+    return Excel::store(new ApplicationExport(), "aplicaciones $date.csv");
 });
