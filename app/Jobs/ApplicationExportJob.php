@@ -33,6 +33,6 @@ class ApplicationExportJob implements ShouldQueue
     public function handle()
     {
         $date = Date::now()->format('Y-m-d');
-        Excel::store(new ApplicationExport(), "aplicaciones $date.csv", 'local');
+        Excel::store(new ApplicationExport($date), "aplicaciones $date.csv", 'local');
     }
 }

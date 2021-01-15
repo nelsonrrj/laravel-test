@@ -25,9 +25,10 @@ Route::prefix('users')->group(function () {
     Route::put('/{id}', 'App\Http\Controllers\UserController@update')->middleware('auth:api')->name('users.update');
 });
 
-Route::prefix('phases')->middleware('auth:api')->group(function () {
+Route::prefix('phases')->group(function () {
     Route::get('/', 'App\Http\Controllers\PhaseController@index')->name('phases.index');
     Route::post('/', 'App\Http\Controllers\PhaseController@store')->name('phases.store');
+    Route::post('/range', 'App\Http\Controllers\PhaseController@range')->name('phases.range');
     Route::put('/{id}', 'App\Http\Controllers\PhaseController@update')->name('phases.update');
     Route::delete('/{id}', 'App\Http\Controllers\PhaseController@destroy')->name('phases.delete');
 });
@@ -37,9 +38,4 @@ Route::prefix('applications')->middleware('auth:api')->group(function () {
     Route::post('/', 'App\Http\Controllers\ApplicationController@store')->name('applications.store');
     Route::put('/{id}', 'App\Http\Controllers\ApplicationController@update')->name('applications.update');
     Route::delete('/{id}', 'App\Http\Controllers\ApplicationController@destroy')->name('applications.delete');
-});
-
-Route::get('/test', function() {
-    $date = Date::now()->format('Y-m-d');
-    return Excel::store(new ApplicationExport(), "aplicaciones $date.csv");
 });

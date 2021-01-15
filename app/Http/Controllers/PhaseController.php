@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PhaseRequest;
+use App\Http\Requests\RangeDateRequest;
 use App\Models\Phase;
+use App\Models\PhaseRecord;
 use Exception;
 
 class PhaseController extends Controller
@@ -83,6 +85,23 @@ class PhaseController extends Controller
         try {
             Phase::destroy($id);
             return response()->json();
+        } catch (Exception $e) {
+            return response()->json(
+                ['message' => $e->getMessage()],
+                500
+            );
+        }
+    }
+
+    public function range(RangeDateRequest $request)
+    {
+        try {
+            $startDate = date($request['start_date']);
+            $finishDate = date($request['finish_date']);
+            $records = PhaseRecord::whereBetween('created_at', [$startDate, $finishDate])->get()->groupBy('created_at');
+            return response()->json([
+                'data' => $records
+            ], 200);
         } catch (Exception $e) {
             return response()->json(
                 ['message' => $e->getMessage()],
