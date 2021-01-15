@@ -16,6 +16,17 @@ class ApplicationSeeder extends Seeder
      */
     public function run()
     {
-        Application::factory()->count(10)->create();
+        Application::create([
+            [
+                'name' => 'Back-end developer',
+                'company' => 'Talently',
+                'phase_id' => 1
+            ],
+            [
+                'name' => 'Front-end developer',
+                'company' => 'Talently',
+                'phase_id' => 1
+            ]
+        ]);
     }
 }

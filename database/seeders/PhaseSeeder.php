@@ -14,16 +14,16 @@ class PhaseSeeder extends Seeder
      */
     public function run()
     {
-        Phase::factory()->create([
+        Phase::create([
             'name' => 'WishList'
         ]);
-        Phase::factory()->create([
+        Phase::create([
             'name' => 'Aplicado'
         ]);
-        Phase::factory()->create([
+        Phase::create([
             'name' => 'Entrevista Técnica'
         ]);
-        Phase::factory()->create([
+        Phase::create([
             'name' => 'Aceptado'
         ]);
     }
